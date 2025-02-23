@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Libro en Venta</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://www.paypal.com/sdk/js?client-id=TU_CLIENT_ID&currency=USD"></script>
+</head>
+<body>
+    <header>
+        <h1>Mi Libro</h1>
+    </header>
+    
+    <main>
+        <div class="producto">
+            <img src="imagen-libro.jpg" alt="Portada del libro">
+            <h2>Título del Libro</h2>
+            <p class="precio">$29.99</p>
+            <p class="descripcion">Una fascinante historia que te cautivará...</p>
+            <div id="paypal-button-container"></div>
+        </div>
+    </main>
+
+    <footer>
+        <p>Contacto: tu@email.com</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
