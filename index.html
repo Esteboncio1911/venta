@@ -31,7 +31,7 @@
         <div class="product-grid">
             <div class="product-card">
                 <div class="product-image">
-                    <img src="libro1.jpg" alt="Libro 1">
+                    <img src="images/libro1.jpg" alt="Libro 1">
                 </div>
                 <div class="product-info">
                     <h3>El Arte de Soñar</h3>
@@ -40,23 +40,44 @@
                     <button class="buy-button">Comprar Ahora</button>
                 </div>
             </div>
-            <!-- Más productos aquí -->
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="images/libro2.jpg" alt="Libro 2">
+                </div>
+                <div class="product-info">
+                    <h3>El Camino del Héroe</h3>
+                    <p class="price">24.99€</p>
+                    <p class="description">Una aventura épica que cambiará tu vida.</p>
+                    <button class="buy-button">Comprar Ahora</button>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="images/libro3.jpg" alt="Libro 3">
+                </div>
+                <div class="product-info">
+                    <h3>Misterios del Universo</h3>
+                    <p class="price">34.99€</p>
+                    <p class="description">Descubre los secretos del cosmos.</p>
+                    <button class="buy-button">Comprar Ahora</button>
+                </div>
+            </div>
         </div>
     </section>
 
     <section id="about" class="about">
         <h2>Sobre Nosotros</h2>
         <div class="about-content">
-            <p>Somos una librería dedicada a traerte las mejores historias...</p>
+            <p>Somos una librería dedicada a traerte las mejores historias del mundo. Nuestra pasión es conectar lectores con libros extraordinarios.</p>
         </div>
     </section>
 
     <section id="contact" class="contact">
         <h2>Contacto</h2>
         <form id="contact-form">
-            <input type="text" placeholder="Nombre" required>
-            <input type="email" placeholder="Email" required>
-            <textarea placeholder="Mensaje" required></textarea>
+            <input type="text" name="name" placeholder="Nombre" required>
+            <input type="email" name="email" placeholder="Email" required>
+            <textarea name="message" placeholder="Mensaje" required></textarea>
             <button type="submit" class="submit-button">Enviar</button>
         </form>
     </section>

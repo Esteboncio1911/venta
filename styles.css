@@ -169,3 +169,12 @@ footer {
         font-size: 2.5rem;
     }
 }
+
+.products {
+    margin-top: 80px;  /* Espacio para el navbar fijo */
+    padding-top: 2rem;
+}
+
+section {
+    padding: 60px 0;
+}
