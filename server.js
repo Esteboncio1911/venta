@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+mongoose.set('strictQuery', false);
 const nodemailer = require('nodemailer');
 const cors = require('cors');
 require('dotenv').config();
@@ -14,6 +15,39 @@ app.use(cors());
 mongoose.connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true
+})
+.then(() => console.log('¡Conexión exitosa a MongoDB!'))
+.catch(err => console.log('Error de conexión:', err));
+
+// Eventos de conexión MongoDB
+mongoose.connection.on('connected', () => {
+    console.log('MongoDB conectado');
+});
+
+mongoose.connection.on('error', (err) => {
+    console.log('Error de MongoDB:', err);
+});
+
+// Modelo de Producto
+const Product = require('./models/Product');
+
+// Rutas de productos
+app.get('/api/products', async (req, res) => {
+    try {
+        const products = await Product.find();
+        res.json(products);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+app.post('/api/products', async (req, res) => {
+    try {
+        const product = await Product.create(req.body);
+        res.status(201).json(product);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 });
 
 // Modelo de Orden

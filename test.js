@@ -1,0 +1,1 @@
+require('dotenv').config();const mongoose = require('mongoose');// Add this line to remove the warningmongoose.set('strictQuery', false);mongoose.connect(process.env.MONGODB_URI)    .then(() => console.log('Conectado a MongoDB!'))    .catch(err => console.error('Error de conexión:', err));
