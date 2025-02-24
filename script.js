@@ -19,41 +19,39 @@ let client = new paypal.core.PayPalHttpClient(environment);
 
 document.querySelectorAll('.buy-button').forEach(button => {
     button.addEventListener('click', async function() {
-        const productCard = this.closest('.product-card');
-        const productName = productCard.querySelector('h3').textContent;
-        const productPrice = parseFloat(productCard.querySelector('.price').textContent);
-        
         try {
-            // Crear orden de PayPal
-            const order = await createPayPalOrder(productName, productPrice);
-            
-            // Guardar en base de datos
-            const response = await fetch('/api/products/purchase', {
+            const response = await fetch('/api/create-payment', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    title: productName,
-                    price: productPrice,
-                    orderId: order.id
+                    price: this.closest('.product-card').querySelector('.price').textContent
                 })
             });
             
             if (response.ok) {
-                showNotification('¡Producto añadido al carrito!', 'success');
-                updateCartCount();
+                window.location.href = '/checkout';
             }
         } catch (error) {
-            showNotification('Error al procesar la compra', 'error');
-            console.error('Error:', error);
+            alert('Error al procesar la compra');
         }
     });
 });
 
+
 // Manejo del formulario de contacto
 document.getElementById('contact-form').addEventListener('submit', async (e) => {
     e.preventDefault();
+    
+    const email = e.target.email.value;
+    const name = e.target.name.value;
+    const message = e.target.message.value;
+
+    if (!isValidEmail(email) || name.length < 3 || message.length < 10) {
+        alert('Por favor, completa todos los campos correctamente');
+        return;
+    }
     
     const formData = new FormData(e.target);
     const contactData = {

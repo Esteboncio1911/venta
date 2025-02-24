@@ -178,3 +178,13 @@ footer {
 section {
     padding: 60px 0;
 }
+
+.product-card {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+}
+
+.buy-button {
+    margin-top: 15px;
+    position: relative;
+}
