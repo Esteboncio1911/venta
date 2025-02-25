@@ -8,6 +8,25 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
+document.querySelectorAll('.product-image').forEach(image => {
+    image.addEventListener('click', () => {
+        const modal = document.createElement('div');
+        modal.className = 'modal';
+        modal.innerHTML = `
+            <div class="modal-content">
+                <img src="${image.querySelector('img').src}" alt="Libro">
+            </div>
+        `;
+        document.body.appendChild(modal);
+        modal.style.display = 'block';
+        
+        modal.addEventListener('click', () => {
+            modal.remove();
+        });
+    });
+});
+
+
 // Configuración de PayPal para cada botón
 document.querySelectorAll('.product-card').forEach((card, index) => {
     const price = card.querySelector('.price').textContent.replace('€', '');
