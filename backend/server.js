@@ -1,90 +1,129 @@
-const express = require('express');
-const mongoose = require('mongoose');
-mongoose.set('strictQuery', false);
-const nodemailer = require('nodemailer');
-const cors = require('cors');
-require('dotenv').config();
-
-const app = express();
-
-// Middleware
-app.use(express.static('public'));
-app.use(express.json());
-app.use(cors());
-
-// Conexión MongoDB
-mongoose.connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-})
-.then(() => console.log('¡Conexión exitosa a MongoDB!'))
-.catch(err => console.log('Error de conexión:', err));
-
-// Eventos de conexión MongoDB
-mongoose.connection.on('connected', () => {
-    console.log('MongoDB conectado');
+// Animación suave para navegación
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+            behavior: 'smooth'
+        });
+    });
 });
 
-mongoose.connection.on('error', (err) => {
-    console.log('Error de MongoDB:', err);
-});
-
-// Modelo de Producto
-const Product = require('./models/Product');
-
-// Rutas de productos
-app.get('/api/products', async (req, res) => {
+// Procesamiento de órdenes y pagos
+async function processOrder(productData, customerData) {
     try {
-        const products = await Product.find();
-        res.json(products);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-});
-
-app.post('/api/products', async (req, res) => {
-    try {
-        const product = await Product.create(req.body);
-        res.status(201).json(product);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-});
-
-// Modelo de Orden
-const Order = require('./models/Order');
-
-// Ruta para guardar pedidos
-app.post('/api/save-order', async (req, res) => {
-    try {
-        const order = await Order.create(req.body);
-        
-        // Configuración del email
-        const transporter = nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-                user: process.env.EMAIL_USER,
-                pass: process.env.EMAIL_PASS
-            }
+        const response = await fetch('/api/save-order', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                productName: productData.name,
+                amount: productData.price,
+                customerInfo: customerData
+            })
         });
 
-        // Enviar email al cliente
-        await transporter.sendMail({
-            from: process.env.EMAIL_USER,
-            to: req.body.customerInfo.email,
-            subject: 'Confirmación de Pedido',
-            html: `
-                <h1>¡Gracias por tu compra!</h1>
-                <p>Tu número de pedido es: ${order.id}</p>
-                <p>Pronto recibirás información sobre el envío.</p>
-            `
-        });
-
-        res.json({ success: true, order });
+        const data = await response.json();
+        if (data.success) {
+            showNotification('¡Pedido realizado con éxito!', 'success');
+        } else {
+            showNotification('Error al procesar el pedido', 'error');
+        }
     } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
+        showNotification('Error de conexión', 'error');
     }
+}
+
+// Configuración de PayPal para cada producto
+document.querySelectorAll('.product-card').forEach((card, index) => {
+    const price = card.querySelector('.price').textContent.replace('€', '');
+    const productName = card.querySelector('h3').textContent;
+    
+    card.addEventListener('click', () => {
+        const modal = document.createElement('div');
+        modal.className = 'modal';
+        modal.innerHTML = `
+            <div class="modal-content">
+                <h3>Datos de Envío</h3>
+                <form id="shipping-form">
+                    <input type="text" name="name" placeholder="Nombre completo" required>
+                    <input type="email" name="email" placeholder="Email" required>
+                    <input type="text" name="street" placeholder="Dirección" required>
+                    <input type="text" name="city" placeholder="Ciudad" required>
+                    <input type="text" name="country" placeholder="País" required>
+                    <input type="text" name="postalCode" placeholder="Código Postal" required>
+                    <button type="submit">Continuar con el pago</button>
+                </form>
+            </div>
+        `;
+        document.body.appendChild(modal);
+
+        document.getElementById('shipping-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const customerData = {
+                name: formData.get('name'),
+                email: formData.get('email'),
+                address: {
+                    street: formData.get('street'),
+                    city: formData.get('city'),
+                    country: formData.get('country'),
+                    postalCode: formData.get('postalCode')
+                }
+            };
+            
+            processOrder({name: productName, price: price}, customerData);
+            modal.remove();
+        });
+    });
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Servidor corriendo en puerto ${PORT}`));
+// Manejo del formulario de contacto
+document.getElementById('contact-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = e.target.email.value;
+    const name = e.target.name.value;
+    const message = e.target.message.value;
+
+    if (name.length < 3) {
+        showNotification('El nombre debe tener al menos 3 caracteres', 'error');
+        return;
+    }
+    if (!email.includes('@') || !email.includes('.')) {
+        showNotification('Por favor, introduce un email válido', 'error');
+        return;
+    }
+    if (message.length < 10) {
+        showNotification('El mensaje debe tener al menos 10 caracteres', 'error');
+        return;
+    }
+
+    showNotification('Mensaje enviado correctamente', 'success');
+    e.target.reset();
+});
+
+// Sistema de notificaciones
+function showNotification(message, type) {
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.textContent = message;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.classList.add('fade-out');
+        setTimeout(() => notification.remove(), 500);
+    }, 3000);
+}
+
+// Animaciones al hacer scroll
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('animate');
+        }
+    });
+});
+
+document.querySelectorAll('.product-card, .about-content, .contact-form')
+    .forEach(element => observer.observe(element));
