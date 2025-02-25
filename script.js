@@ -28,33 +28,25 @@ document.querySelectorAll('.product-image').forEach(image => {
 
 
 // Configuración de PayPal para cada botón
-document.querySelectorAll('.product-card').forEach((card, index) => {
-    const price = card.querySelector('.price').textContent.replace('€', '');
-    const productName = card.querySelector('h3').textContent;
-    
-    paypal.Buttons({
-        createOrder: (data, actions) => {
-            return actions.order.create({
-                purchase_units: [{
-                    description: productName,
-                    amount: {
-                        currency_code: 'EUR',
-                        value: price
-                    }
-                }]
-            });
-        },
-        onApprove: (data, actions) => {
-            return actions.order.capture().then(function(orderData) {
-                showNotification(`¡Compra completada! ID de la orden: ${orderData.id}`, 'success');
-            });
-        },
-        onError: (err) => {
-            showNotification('Error al procesar el pago', 'error');
-            console.error(err);
-        }
-    }).render(`#paypal-button-container-${index + 1}`);
+document.querySelectorAll('.product-card').forEach(card => {
+    card.addEventListener('click', () => {
+        const modal = document.createElement('div');
+        modal.className = 'modal';
+        modal.innerHTML = `
+            <div class="modal-content">
+                <h3>Selecciona tu método de pago</h3>
+                <div class="payment-methods">
+                    <div id="paypal-button-container"></div>
+                    <button class="payment-button">Tarjeta de Crédito</button>
+                    <button class="payment-button">Transferencia Bancaria</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+        modal.style.display = 'block';
+    });
 });
+
 
 // Manejo del formulario de contacto
 document.getElementById('contact-form').addEventListener('submit', async (e) => {
