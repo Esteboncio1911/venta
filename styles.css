@@ -189,16 +189,25 @@ section {
     position: relative;
 }
 
-.hero-content p {
-    margin-bottom: 2rem;  /* Espacio entre el texto y el botón */
+.hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
 }
 
 .hero-content h1 {
-    margin-bottom: 1.5rem;  /* Espacio entre el título y el párrafo */
+    font-family: 'Playfair Display', serif;
+    font-size: 3.5rem;
+}
+
+.hero-content p {
+    font-size: 1.2rem;
 }
 
 .cta-button {
     display: inline-block;
-    margin-top: 1rem;  /* Espacio adicional arriba del botón */
+    align-self: center;
 }
-
