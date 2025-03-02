@@ -246,3 +246,40 @@ section {
     width: 100%;
     height: auto;
 }
+
+/* Estilos para cookies */
+.cookie-banner {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    padding: 20px;
+    z-index: 1000;
+}
+
+.cookie-content {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.cookie-buttons {
+    margin-top: 15px;
+    display: flex;
+    gap: 10px;
+}
+
+.cookie-buttons button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background: var(--accent-color);
+    color: white;
+    transition: background 0.3s ease;
+}
+
+.cookie-buttons button:hover {
+    background: #c0392b;
+}

@@ -171,6 +171,45 @@ function showNotification(message, type) {
     }, 3000);
 }
 
+// Gestión de Cookies
+function createCookieBanner() {
+    if (!getCookie('cookiesAccepted')) {
+        const banner = document.createElement('div');
+        banner.className = 'cookie-banner';
+        banner.innerHTML = `
+            <div class="cookie-content">
+                <p>Usamos cookies para mejorar tu experiencia</p>
+                <p>En Librería Elegante, utilizamos cookies propias y de terceros para mejorar tu experiencia de navegación. 
+                   <a href="/cookies-policy">Política de Cookies</a>.</p>
+                <div class="cookie-buttons">
+                    <button onclick="acceptAllCookies()">✅ Aceptar todas</button>
+                    <button onclick="showCookieSettings()">⚙️ Configurar cookies</button>
+                    <button onclick="rejectCookies()">❌ Rechazar</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(banner);
+    }
+}
+
+// Funciones de cookies
+function setCookie(name, value, days) {
+    const expires = new Date();
+    expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
+    document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/`;
+}
+
+function getCookie(name) {
+    const nameEQ = name + "=";
+    const ca = document.cookie.split(';');
+    for(let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+    }
+    return null;
+}
+
 // Animaciones al hacer scroll
 const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
