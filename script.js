@@ -26,24 +26,34 @@ document.querySelectorAll('.product-image').forEach(image => {
     });
 });
 
-// Cookie banner initialization - place this at the very beginning of the file
-window.onload = function() {
-    // Create and show cookie banner immediately
-    const banner = document.createElement('div');
-    banner.className = 'cookie-banner';
-    banner.innerHTML = `
-        <div class="cookie-content">
-            <p>Usamos cookies para mejorar tu experiencia</p>
-            <p>En Librería Elegante, utilizamos cookies propias y de terceros para mejorar tu experiencia de navegación.</p>
-            <div class="cookie-buttons">
-                <button onclick="handleCookies('accept')">✅ Aceptar todas</button>
-                <button onclick="handleCookies('settings')">⚙️ Configurar cookies</button>
-                <button onclick="handleCookies('reject')">❌ Rechazar</button>
+// Cookie Banner Implementation
+document.addEventListener('DOMContentLoaded', () => {
+    if (!localStorage.getItem('cookiesAccepted')) {
+        const banner = document.createElement('div');
+        banner.className = 'cookie-banner';
+        banner.innerHTML = `
+            <div class="cookie-content">
+                <p>Usamos cookies para mejorar tu experiencia</p>
+                <div class="cookie-buttons">
+                    <button id="accept-cookies">Aceptar</button>
+                    <button id="reject-cookies">Rechazar</button>
+                </div>
             </div>
-        </div>
-    `;
-    document.body.appendChild(banner);
-};
+        `;
+        
+        document.body.appendChild(banner);
+        
+        document.getElementById('accept-cookies').onclick = () => {
+            localStorage.setItem('cookiesAccepted', 'true');
+            banner.remove();
+        };
+        
+        document.getElementById('reject-cookies').onclick = () => {
+            localStorage.setItem('cookiesAccepted', 'false');
+            banner.remove();
+        };
+    }
+});
 
 // Simplified cookie handling function
 function handleCookies(action) {
