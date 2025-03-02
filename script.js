@@ -210,6 +210,27 @@ function getCookie(name) {
     return null;
 }
 
+// Inicializar el banner de cookies cuando se carga la página
+document.addEventListener('DOMContentLoaded', () => {
+    createCookieBanner();
+});
+
+// Funciones para los botones de cookies
+function acceptAllCookies() {
+    setCookie('cookiesAccepted', 'true', 365);
+    document.querySelector('.cookie-banner').remove();
+}
+
+function rejectCookies() {
+    setCookie('cookiesAccepted', 'false', 365);
+    document.querySelector('.cookie-banner').remove();
+}
+
+function showCookieSettings() {
+    // Aquí puedes añadir la lógica para mostrar las configuraciones detalladas
+    alert('Configuración de cookies (en desarrollo)');
+}
+
 // Animaciones al hacer scroll
 const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
