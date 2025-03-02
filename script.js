@@ -26,6 +26,47 @@ document.querySelectorAll('.product-image').forEach(image => {
     });
 });
 
+// Add this at the beginning of your script.js file
+window.addEventListener('load', function() {
+    // Create cookie banner
+    const cookieBanner = document.createElement('div');
+    cookieBanner.className = 'cookie-banner';
+    cookieBanner.innerHTML = `
+        <div class="cookie-content">
+            <p>Esta web usa cookies</p>
+            <button id="accept-cookies">Aceptar</button>
+            <button id="show-policy">Política de cookies</button>
+        </div>
+    `;
+    document.body.appendChild(cookieBanner);
+
+    // Create policy modal
+    const policyModal = document.createElement('div');
+    policyModal.className = 'cookie-policy-modal';
+    policyModal.style.display = 'none';
+    policyModal.innerHTML = `
+        <div class="policy-content">
+            <h2>Política de Cookies</h2>
+            <!-- Your existing policy content -->
+            <button id="close-policy">Cerrar</button>
+        </div>
+    `;
+    document.body.appendChild(policyModal);
+
+    // Add event listeners
+    document.getElementById('accept-cookies').addEventListener('click', function() {
+        cookieBanner.style.display = 'none';
+    });
+
+    document.getElementById('show-policy').addEventListener('click', function() {
+        policyModal.style.display = 'block';
+    });
+
+    document.getElementById('close-policy').addEventListener('click', function() {
+        policyModal.style.display = 'none';
+    });
+});
+
 // Implementación del banner de cookies
 document.addEventListener('DOMContentLoaded', () => {
     const banner = document.createElement('div');
