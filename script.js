@@ -8,6 +8,33 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
+document.addEventListener('DOMContentLoaded', () => {
+    // Create and show cookie notice immediately
+    const cookieNotice = document.createElement('div');
+    cookieNotice.style.cssText = `
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: white;
+        padding: 15px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        z-index: 10000;
+    `;
+    
+    cookieNotice.innerHTML = `
+        <p style="margin-bottom: 10px;">Esta web usa cookies</p>
+        <button onclick="this.parentElement.remove()" style="background: #e74c3c; color: white; border: none; padding: 5px 10px; margin-right: 10px; cursor: pointer;">Aceptar</button>
+        <button onclick="showPolicy()" style="background: #2c3e50; color: white; border: none; padding: 5px 10px; cursor: pointer;">Ver política</button>
+    `;
+    
+    document.body.appendChild(cookieNotice);
+});
+
+function showPolicy() {
+    alert('Política de cookies: Este sitio utiliza cookies para mejorar tu experiencia de navegación.');
+}
+
 document.querySelectorAll('.product-image').forEach(image => {
     image.addEventListener('click', () => {
         const modal = document.createElement('div');
