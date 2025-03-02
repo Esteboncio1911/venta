@@ -26,25 +26,39 @@ document.querySelectorAll('.product-image').forEach(image => {
     });
 });
 
-// Gestión de Cookies
-function createCookieBanner() {
-    if (!getCookie('cookiesAccepted')) {
-        const banner = document.createElement('div');
-        banner.className = 'cookie-banner';
-        banner.innerHTML = `
-            <div class="cookie-content">
-                <p>Usamos cookies para mejorar tu experiencia</p>
-                <p>En Librería Elegante, utilizamos cookies propias y de terceros para mejorar tu experiencia de navegación. 
-                   <a href="/cookies-policy">Política de Cookies</a>.</p>
-                <div class="cookie-buttons">
-                    <button onclick="acceptAllCookies()">✅ Aceptar todas</button>
-                    <button onclick="showCookieSettings()">⚙️ Configurar cookies</button>
-                    <button onclick="rejectCookies()">❌ Rechazar</button>
-                </div>
+// Cookie banner initialization - place this at the very beginning of the file
+window.onload = function() {
+    // Create and show cookie banner immediately
+    const banner = document.createElement('div');
+    banner.className = 'cookie-banner';
+    banner.innerHTML = `
+        <div class="cookie-content">
+            <p>Usamos cookies para mejorar tu experiencia</p>
+            <p>En Librería Elegante, utilizamos cookies propias y de terceros para mejorar tu experiencia de navegación.</p>
+            <div class="cookie-buttons">
+                <button onclick="handleCookies('accept')">✅ Aceptar todas</button>
+                <button onclick="handleCookies('settings')">⚙️ Configurar cookies</button>
+                <button onclick="handleCookies('reject')">❌ Rechazar</button>
             </div>
-        `;
-        document.body.appendChild(banner);
+        </div>
+    `;
+    document.body.appendChild(banner);
+};
+
+// Simplified cookie handling function
+function handleCookies(action) {
+    switch(action) {
+        case 'accept':
+            localStorage.setItem('cookiesAccepted', 'true');
+            break;
+        case 'reject':
+            localStorage.setItem('cookiesAccepted', 'false');
+            break;
+        case 'settings':
+            alert('Configuración de cookies (en desarrollo)');
+            return;
     }
+    document.querySelector('.cookie-banner').remove();
 }
 
 // Funciones de cookies
